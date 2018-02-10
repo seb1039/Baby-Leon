@@ -21,10 +21,15 @@ public class MainC {
 			//Motors.motorTest();			
 			//Touch.touchTest();
 		    //Ultrason.ultrasonTest();
-		 //   Colors.colorsTest();
+		    //Colors.colorsTest();
+		    //Pliers.pliersTest();
 		    
-		    ColorPreference pref = new ColorPreference("/usr/lejos/preference/couleurs");
-		    pref.startCalibration();
+		    Pliers pliers = new Pliers(Motor.B);
+		    pliers.open();
+		    pliers.close();
+		    
+		    //ColorPreference pref = new ColorPreference("/usr/lejos/preference/couleurs");
+		    //pref.startCalibration();
 		    
 		    /***
 		    Chassis chassis = new Chassis(56, 68);
