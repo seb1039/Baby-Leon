@@ -2,6 +2,7 @@ package preferences;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -19,7 +20,22 @@ import lejos.utility.Delay;
 
 public class ColorPreference implements Calibrate {
 
-	public static void startCalibrate(String fileName) {
+	private String fileName;
+
+	public ColorPreference(String fileName) {
+		File tmp = new File(fileName);
+		if(!tmp.exists()){
+			try{
+			tmp.createNewFile();
+			}catch(IOException e){
+				System.out.println("Création Impossible");
+			}
+		}
+		this.fileName = fileName;
+	}
+	
+
+	public void startCalibration(String fileName) {
 		try {
 			BufferedWriter file = new BufferedWriter(new FileWriter(fileName));
 
@@ -67,7 +83,8 @@ public class ColorPreference implements Calibrate {
 			file.write(black + "");
 
 			/***
-			 * File 1 : Average 2 : Red 3 : Green 4 : Blue 5 : Yellow 6 : White 7 : Black
+			 * File 1 : Average 2 : Red 3 : Green 4 : Blue 5 : Yellow 6 : White
+			 * 7 : Black
 			 */
 
 		} catch (Throwable t) {
@@ -78,6 +95,11 @@ public class ColorPreference implements Calibrate {
 			System.exit(0);
 		}
 	}
+
+	public void test() {
+		test(fileName);
+	}
+
 	public void test(String fileName) {
 		Port port = LocalEV3.get().getPort("S2");
 		EV3ColorSensor colorSensor = new EV3ColorSensor(port);
@@ -159,7 +181,7 @@ public class ColorPreference implements Calibrate {
 			if (Button.ESCAPE.isDown()) {
 				colorSensor.setFloodlight(false);
 			}
-			
+
 			colorSensor.close();
 			file.close();
 		} catch (FileNotFoundException f) {
@@ -175,7 +197,7 @@ public class ColorPreference implements Calibrate {
 
 	@Override
 	public void startCalibration() {
-		startCalibrate("~/Preferences/couleurs");
+		startCalibration("~/Preferences/couleurs");
 	}
 
 	@Override

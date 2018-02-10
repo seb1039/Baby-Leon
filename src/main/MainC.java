@@ -2,6 +2,7 @@ package main;
 import lejos.hardware.*;
 import lejos.robotics.*;
 import lejos.utility.Delay;
+import preferences.ColorPreference;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.*;
 import lejos.hardware.port.Port;
@@ -20,7 +21,10 @@ public class MainC {
 			//Motors.motorTest();			
 			//Touch.touchTest();
 		    //Ultrason.ultrasonTest();
-		    Colors.colorsTest();
+		 //   Colors.colorsTest();
+		    
+		    ColorPreference pref = new ColorPreference("/usr/lejos/preference/couleurs");
+		    pref.startCalibration();
 		    
 		    /***
 		    Chassis chassis = new Chassis(56, 68);
