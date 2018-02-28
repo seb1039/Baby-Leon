@@ -3,6 +3,7 @@ package main;
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.LCD;
+import lejos.hardware.motor.BaseRegulatedMotor;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
@@ -12,6 +13,12 @@ import lejos.robotics.SampleProvider;
 import lejos.robotics.filter.MeanFilter;
 
 public class Colors {
+	
+public static BaseRegulatedMotor eyescolor;
+	
+	public Colors(BaseRegulatedMotor motorPort){
+		this.eyescolor=motorPort;	
+	}
 
 	public static void colorsTest() {
 

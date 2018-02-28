@@ -15,8 +15,13 @@ public class MainC {
 
 	public static void main(String[] args)  {
 		// Sound.beep();
+		
+		
 		try {
 		    LCD.clear();
+		    
+
+			Button.waitForAnyPress();
 		    
 			//Motors.motorTest();			
 			//Touch.touchTest();
@@ -24,29 +29,57 @@ public class MainC {
 		    //Colors.colorsTest();
 		    //Pliers.pliersTest();
 		    
+		    /***
 		    Pliers pliers = new Pliers(Motor.B);
 		    pliers.open();
 		    pliers.close();
-		    
-		    //ColorPreference pref = new ColorPreference("/usr/lejos/preference/couleurs");
-		    //pref.startCalibration();
+		    ***/
 		    
 		    /***
-		    Chassis chassis = new Chassis(56, 68);
-		    chassis.forward(300, 100000);
-		    LCD.drawString("Moteurs demarrés", 1, 2);
-		    Delay.msDelay(10000);
-		    chassis.uTurn();
-		    Delay.msDelay(10000);
-		    chassis.forward(500, 100000);
-		    Delay.msDelay(10000);
-		    chassis.stop();
+		    ColorPreference pref = new ColorPreference("/home/lejos/preference/couleurs");
+		    pref.startCalibration();
 		    ***/
+		    
+		  
+		    
+			//while (!Button.ENTER.isDown()) {
+
+				Pliers pliers = new Pliers(Motor.B);
+
+				Chassis chassis = new Chassis(Motor.A, Motor.C, 56, 68);
+				//pliers.open();
+				chassis.forward(300, 10000);				
+				LCD.drawString("Moteurs demarres", 1, 2);
+				//pliers.close();
+				//chassis.uTurn();	
+				//chassis.forward(300, 100);
+				//chassis.stop();
+				
+				EV3UltrasonicSensor ultrason = new EV3UltrasonicSensor(SensorPort.S3);
+				SampleProvider son= ultrason.getDistanceMode();
+
+		        float[] sample = new float[son.sampleSize()];
+		        float range=10;
+		        while (range>0.8){
+		        	son.fetchSample(sample, 0);
+			        range=sample[0];
+			        LCD.drawString("distance: "+ range, 1, 2);
+			    }
+		        chassis.stop();
+		        Button.waitForAnyPress();
+
+			//}
+		    
 			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			Button.waitForAnyPress();
 		}
-	}
-
+	
 }
+	
+}
+
+
+
+

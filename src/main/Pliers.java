@@ -33,6 +33,7 @@ public class Pliers {
 		pliers.stop();
 	}
 	
+	/***
 	public static void pliersTest(){
 		
 		//PINCES
@@ -51,5 +52,6 @@ public class Pliers {
 		LCD.drawString("pliersTest Finished", 3, 4);
 		
 		}
+		***/
 
 }

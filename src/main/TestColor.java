@@ -13,7 +13,7 @@ import lejos.robotics.filter.MeanFilter;
 import lejos.utility.Delay;
 
 public class TestColor {
-/***
+
 	public static boolean goMessage() {
 
 		GraphicsLCD g = LocalEV3.get().getGraphicsLCD();
@@ -58,12 +58,12 @@ public class TestColor {
 			g.clear();
 			return true;
 		}
-	}***/
+	}
 
 	/**
 	 * @param args
 	 */
-	/***
+	
 	public static void main(String[] args) {
 		LCD.clear();
 		try {
@@ -160,5 +160,5 @@ public class TestColor {
 	public static double scalaire(float[] v1, float[] v2) {
 		return Math.sqrt(Math.pow(v1[0] - v2[0], 2.0) + Math.pow(v1[1] - v2[1], 2.0) + Math.pow(v1[2] - v2[2], 2.0));
 	}
-***/
+
 }
