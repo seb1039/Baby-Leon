@@ -49,23 +49,24 @@ public class MainC {
 			// chassis.forward(300, 100);
 			// chassis.stop();
 
-			Ultrason ultrason = new Ultrason(SensorPort.S3);
-			SampleProvider son = ultrason.getDistanceMode();
 
+		//	Ultrason ultrason = new Ultrason(SensorPort.S3);
+			//SampleProvider son = ultrason.getDistanceMode();
+			Ultrason.ultrasonTest();
+			/***
 			float[] sample = new float[son.sampleSize()];
 			float range = 1;
-			pliers.open();
 			Ultrason ul = new Ultrason();
 			
-			do {
-				LCD.clear();
-				LCD.drawString("distance:", 1, 2);
-				LCD.drawString("" + range, 1, 3);
-			} while (ultrason.detectionPalet());
-			LCD.drawString("" + range, 1, 3);
-			chassis.stop();
+			while (!ultrason.detectionPalet(.4f));
+			LCD.drawString("Détecté" + range, 1, 3);
+			pliers.open();
+			chassis.forward(200,1000);
+			Delay.msDelay(1000);
 			pliers.close();
 			Button.waitForAnyPress();
+			**/
+		
 
 			// }
 

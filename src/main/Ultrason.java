@@ -14,70 +14,83 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.SampleProvider;
 import lejos.utility.Delay;
 
-public class Ultrason extends EV3UltrasonicSensor{
-	
+public class Ultrason extends EV3UltrasonicSensor {
+
 	public static EV3UltrasonicSensor eyes;
 	public static SampleProvider view;
 	private float[] sample;
 	private float range;
-	
-	public Ultrason(){
-		this("S2");
+
+	public Ultrason() {
+		this("S3");
 	}
-	
+
 	public Ultrason(Port port) {
 		super(port);
 		this.view = this.getDistanceMode();
 		sample = new float[view.sampleSize()];
-		range = 1;
+		range = 1f;
 	}
 
-	public Ultrason(String portName){
+	public Ultrason(String portName) {
 		super(LocalEV3.get().getPort(portName));
 		this.view = this.getDistanceMode();
 		sample = new float[view.sampleSize()];
-		range = 1;
+		range = 1f;
 	}
-	
-	public boolean detectionPalet() {
+
+	public boolean detectionPalet(float distance) {
 		/**
-		 * 1. On capte qqchs
-		 * 2. Si on ne recapte plus, on ouvre les pinces
-		 * 3. Sinon, on referme les pinces
+		 * 1. On capte qqchs 2. Si on ne recapte plus, on ouvre les pinces 3. Sinon, on
+		 * referme les pinces
 		 */
-		
+
+		LCD.clear();
+		LCD.drawString("distance:", 1, 2);
+		LCD.drawString("" + range, 1, 3);
+
 		/**
 		 * Etape 1
 		 */
-		while (range > 0.4) {
+		if (range < distance && range > 0.0f) {
 			view.fetchSample(sample, 0);
 			range = sample[0];
-			
+
+		} else {
+			return false;
 		}
-		Delay.msDelay(200);
+
+		LCD.clear();
+		LCD.drawString("distance:", 1, 2);
+		LCD.drawString("" + range, 1, 3);
+		Delay.msDelay(300);
 		/**
 		 * Etape 2
 		 */
 		view.fetchSample(sample, 0);
 		range = sample[0];
-		return range > 0.4;
+		if (range < distance && range > 0.0f) {
+			LCD.drawString("Detecte" + (double) range, 1, 4);
+			return true;
+		}
+		return false;
 	}
-	
-	/***
-	 * public static void ultrasonTest(){
-	 * EV3UltrasonicSensor ultrason = new EV3UltrasonicSensor(SensorPort.S3);
-	 * SampleProvider son= ultrason.getDistanceMode();
-	 * float[] sample = new float[son.sampleSize()];
-	 * float range=10;
-	 * Motor.A.forward();
-	 * Motor.C.forward();
-	 * while (range>0.1){
-	 * 		son.fetchSample(sample, 0);
-	 * 		range=sample[0];
-	 * }
-        Motor.A.stop();
-    	Motor.C.stop();	
-	    LCD.drawString("touchTest Finished", 3, 4);
-	}***/
+
+	public static void ultrasonTest() {
+		EV3UltrasonicSensor ultrason = new EV3UltrasonicSensor(SensorPort.S3);
+		SampleProvider son = ultrason.getDistanceMode();
+		float[] sample = new float[son.sampleSize()];
+		float range = 10;
+		Motor.A.forward();
+		Motor.C.forward();
+		while (range > 0.15) {
+			son.fetchSample(sample, 0);
+			range = sample[0];
+			LCD.drawString("" + range, 1, 3);
+		}
+		Motor.A.stop();
+		Motor.C.stop();
+		LCD.drawString("touchTest Finished", 3, 4);
+	}
 
 }

@@ -18,7 +18,7 @@ import lejos.robotics.SampleProvider;
 import lejos.robotics.filter.MeanFilter;
 import lejos.utility.Delay;
 
-public class ColorPreference implements Calibrate {
+public class ColorPreference {
 
 	private String fileName;
 
@@ -194,15 +194,7 @@ public class ColorPreference implements Calibrate {
 	public static double scalaire(float[] v1, float[] v2) {
 		return Math.sqrt(Math.pow(v1[0] - v2[0], 2.0) + Math.pow(v1[1] - v2[1], 2.0) + Math.pow(v1[2] - v2[2], 2.0));
 	}
-
-	@Override
-	public void startCalibration() {
-		startCalibration("~/Preferences/couleurs");
-	}
-
-	@Override
-	public void stopCalibration() {
-		// TODO Auto-generated method stub
-
+	
+	public static void main(String[] args){
 	}
 }
