@@ -17,7 +17,7 @@ public class Pliers {
 		this.tachocount=pliers.getTachoCount();		
 	}
 	
-	public static void open(){
+	public void open(){
 		pliers.forward();
 		while(tachocount<900){
 			tachocount=pliers.getTachoCount();
@@ -25,7 +25,7 @@ public class Pliers {
 		pliers.stop();
 	}
 	
-	public static void close(){
+	public void close(){
 		pliers.backward();
 		while(tachocount>0){
 			tachocount=pliers.getTachoCount();

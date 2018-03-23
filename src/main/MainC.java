@@ -38,25 +38,15 @@ public class MainC {
 			// while (!Button.ENTER.isDown()) {
 
 			Chassis chassis = new Chassis(Motor.A, Motor.C, 56, 68);
-			// pliers.open();
 			chassis.forward(300, 10000);
 			/**
 			 * Il faudrait qu'on fasse varier la vitesse
 			 */
 			LCD.drawString("Moteurs demarres", 1, 2);
-			// pliers.close();
-			// chassis.uTurn();
-			// chassis.forward(300, 100);
-			// chassis.stop();
-
-
-		//	Ultrason ultrason = new Ultrason(SensorPort.S3);
-			//SampleProvider son = ultrason.getDistanceMode();
-			Ultrason.ultrasonTest();
-			/***
-			float[] sample = new float[son.sampleSize()];
+			Ultrason ultrason = new Ultrason(SensorPort.S3);
+			SampleProvider son = ultrason.getDistanceMode();
+		//	Ultrason.ultrasonTest();
 			float range = 1;
-			Ultrason ul = new Ultrason();
 			
 			while (!ultrason.detectionPalet(.4f));
 			LCD.drawString("Détecté" + range, 1, 3);
@@ -65,7 +55,6 @@ public class MainC {
 			Delay.msDelay(1000);
 			pliers.close();
 			Button.waitForAnyPress();
-			**/
 		
 
 			// }
