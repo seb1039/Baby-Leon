@@ -12,7 +12,7 @@ import lejos.hardware.sensor.*;
 import lejos.remote.ev3.RemoteAnalogPort;
 import lejos.remote.ev3.RemotePort;
 
-public class MainC {
+public class MainSeb {
 
 	public static void main(String[] args) {
 		// Sound.beep();

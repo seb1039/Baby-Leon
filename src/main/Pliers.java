@@ -9,8 +9,8 @@ import lejos.utility.Delay;
 
 public class Pliers {
 	
-	public static int tachocount;
-	public static BaseRegulatedMotor pliers;
+	private int tachocount;
+	private BaseRegulatedMotor pliers;
 	
 	public Pliers(BaseRegulatedMotor motorPort){
 		this.pliers=motorPort;
@@ -19,7 +19,7 @@ public class Pliers {
 	
 	public void open(){
 		pliers.forward();
-		while(tachocount<900){
+		while(tachocount<500){
 			tachocount=pliers.getTachoCount();
 		}
 		pliers.stop();

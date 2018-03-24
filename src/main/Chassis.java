@@ -8,41 +8,44 @@ import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
 
 public class Chassis {
-	
+
 	private Wheel wheel1;
 	private Wheel wheel2;
 	private WheeledChassis chassis;
-	
-	
-	
-	//Constructor
+
+	// Constructor
 	public Chassis(NXTRegulatedMotor a, NXTRegulatedMotor b, int wheelDiameter, float offset) {
 		this.wheel1 = WheeledChassis.modelWheel((RegulatedMotor) a, wheelDiameter).offset(-offset);
 		this.wheel2 = WheeledChassis.modelWheel((RegulatedMotor) b, wheelDiameter).offset(offset);
 		this.chassis = new WheeledChassis(new Wheel[] { wheel1, wheel2 }, WheeledChassis.TYPE_DIFFERENTIAL);
 	}
-	
-	
-	public void forward(double speed, double distance){
+
+	public void forward(double speed, double distance) {
 		this.chassis.setLinearSpeed(speed);
 		this.chassis.travel(distance);
-		
-	}
-	
 
-	
-	public void uTurn(){
+	}
+
+	public void uTurn() {
 		this.chassis.rotate(180);
 		this.chassis.waitComplete();
 	}
-	
-	public void completeTurn(){
+
+	public void completeTurn() {
 		this.chassis.rotate(360);
 		this.chassis.waitComplete();
 	}
-	
-	public void stop(){
+
+	public void stop() {
 		this.chassis.stop();
+	}
+	
+	public void deviation() {
+		this.chassis.rotate(90);
+		this.chassis.waitComplete();
+		forward(800,1000);
+		this.chassis.rotate(-90);
+		forward(800,1000);
 	}
 
 }

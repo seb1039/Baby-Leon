@@ -16,7 +16,6 @@ import lejos.utility.Delay;
 
 public class Ultrason extends EV3UltrasonicSensor {
 
-	public static EV3UltrasonicSensor eyes;
 	public static SampleProvider view;
 	private float[] sample;
 	private float range;
@@ -39,7 +38,7 @@ public class Ultrason extends EV3UltrasonicSensor {
 		range = 1f;
 	}
 
-	public boolean detectionPalet(float distance) {
+	public boolean detectionPalet(float distance, int delay) {
 		/**
 		 * 1. On capte qqchs 2. Si on ne recapte plus, on ouvre les pinces 3. Sinon, on
 		 * referme les pinces
@@ -52,18 +51,12 @@ public class Ultrason extends EV3UltrasonicSensor {
 		/**
 		 * Etape 1
 		 */
-		if (range < distance && range > 0.0f) {
-			view.fetchSample(sample, 0);
-			range = sample[0];
 
-		} else {
+		view.fetchSample(sample, 0);
+		range = sample[0];
+		if (range > distance || range < 0.0f)
 			return false;
-		}
-
-		LCD.clear();
-		LCD.drawString("distance:", 1, 2);
-		LCD.drawString("" + range, 1, 3);
-		Delay.msDelay(300);
+		Delay.msDelay(delay);
 		/**
 		 * Etape 2
 		 */
