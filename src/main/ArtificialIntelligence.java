@@ -10,11 +10,9 @@ public class ArtificialIntelligence {
 
 	protected enum Statut {
 		STANDBY, DEMARRAGE, GOLLUM, SHERLOCK, EGOCENTRIQUE, SHERLOCK2, FIN
-
 	}
 
 	private Statut statut;
-
 	/**
 	 * Les différents moteurs
 	 */
@@ -64,7 +62,7 @@ public class ArtificialIntelligence {
 				actionSherlock(iteration);
 				break;
 			case EGOCENTRIQUE:
-				actionEgocentric();
+				actionEgocentrique();
 				break;
 			case SHERLOCK2:
 				actionSherlock2(iteration);
@@ -141,7 +139,7 @@ public class ArtificialIntelligence {
 		statut = Statut.EGOCENTRIQUE;
 	}
 
-	public void actionEgocentric() {
+	public void actionEgocentrique() {
 		/*
 		 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!
 		 * ATTENTION: !! !! Il faut rajouter là une méthode pour rejoindre le centre!!
