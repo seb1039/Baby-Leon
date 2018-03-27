@@ -4,6 +4,7 @@ import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.Motor;
+import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 
 public class ArtificialIntelligence {
@@ -32,7 +33,7 @@ public class ArtificialIntelligence {
 		this.chassis = new Chassis(Motor.A, Motor.C, 56, 68);
 		this.ultrason = new Ultrason(SensorPort.S3);
 		this.touch = new Touch(SensorPort.S1);
-		this.colors = new Colors(Motor.B);
+		this.colors = new Colors((Port) Motor.B);
 	}
 
 	public Statut getStatut() {
@@ -74,45 +75,25 @@ public class ArtificialIntelligence {
 			}
 	}
 
+	//Initialisation de tous les capteurs/moteurs/couleurs
 	public void actionStandby() {
 		LCD.drawString("Appuyez sur ENTER pour commencer", 3, 1);
 		Button.ENTER.waitForPress();
 		statut = Statut.DEMARRAGE;
 	}
 
+	//Avancer pour chercher palet
 	public void actionDemarrage() {
-		Thread palet = new Thread(new Runnable() {
-			private boolean test = true;
-
-			@Override
-			public void run() {
-				while (test) {
-					test = ultrason.detectionPalet(.4f, 200);
-					try {
-						Thread.sleep(50);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		});
-		palet.start();
 		pliers.open();
-		chassis.forward(700, 1000);
-		try {
-			palet.join();
-			LCD.drawString("Détecté", 1, 3);
-		} catch (InterruptedException e) {
-			LCD.drawString("InterruptedException", 1, 2);
-		}
-		pliers.open();
-		int wait = 500;
-		chassis.forward(100, wait);
+		chassis.forward(700, 10000);
 		if (touch.isPressed())
 			pliers.close();
 		statut = Statut.GOLLUM;
 	}
+	
+	
 
+	//Aller déposer le palet dans la zone ennemie
 	public void actionGollum() {
 		pliers.close();
 		chassis.deviation();
@@ -123,6 +104,7 @@ public class ArtificialIntelligence {
 		 */
 	}
 
+	//Après dépôt, rechercher nouveau palet tour 180
 	public void actionSherlock(int iteration) {
 		boolean test;
 		pliers.open();
@@ -139,6 +121,7 @@ public class ArtificialIntelligence {
 		statut = Statut.EGOCENTRIQUE;
 	}
 
+	//Si on trouve pas de palet à partir de sherlock, alors egocentrique : aller au centre
 	public void actionEgocentrique() {
 		/*
 		 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!
@@ -149,6 +132,7 @@ public class ArtificialIntelligence {
 		statut = Statut.SHERLOCK2;
 	}
 
+	//Recherche palet tour complet 360
 	public void actionSherlock2(int iteration) {
 		boolean test;
 		chassis.completeTurnResearch();
@@ -162,6 +146,7 @@ public class ArtificialIntelligence {
 		statut = Statut.FIN;
 	}
 
+	//Fin de la partie
 	public void actionFin() {
 		/*
 		 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!

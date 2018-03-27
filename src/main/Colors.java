@@ -105,7 +105,7 @@ public class Colors extends EV3ColorSensor {
 			colorDetected = "white";
 		}
 
-		LCD.drawString("The color is " + colorDetected + " \n");
+		LCD.drawString("The color is " + colorDetected + " \n",1,1);
 		// Button.waitForAnyPress();
 
 	}

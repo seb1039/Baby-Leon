@@ -43,7 +43,7 @@ public class MainC {
 
 
 			Chassis chassis = new Chassis(Motor.A, Motor.C, 56, 68);
-			chassis.forward(150, 10000);
+			chassis.forward(150, 100000);
 			/**
 			 * Il faudrait qu'on fasse varier la vitesse
 			 */
@@ -56,10 +56,9 @@ public class MainC {
 				;
 			LCD.drawString("Détecté" + range, 1, 3);
 			pliers.open();
-			int wait = 500;
-			chassis.forward(50, wait);
 			if (touch.isPressed()){
-			pliers.close();}
+				pliers.close();
+			}
 			Button.waitForAnyPress();
 			ultrason.close();
 
