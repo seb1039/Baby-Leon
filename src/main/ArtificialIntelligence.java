@@ -6,6 +6,7 @@ import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
+import lejos.robotics.SampleProvider;
 
 public class ArtificialIntelligence {
 
@@ -75,25 +76,31 @@ public class ArtificialIntelligence {
 			}
 	}
 
-	//Initialisation de tous les capteurs/moteurs/couleurs
+	// Initialisation de tous les capteurs/moteurs/couleurs
 	public void actionStandby() {
 		LCD.drawString("Appuyez sur ENTER pour commencer", 3, 1);
 		Button.ENTER.waitForPress();
 		statut = Statut.DEMARRAGE;
 	}
 
-	//Avancer pour chercher palet
+	// Avancer pour chercher palet
 	public void actionDemarrage() {
+		chassis.forward(150, 100000);
+		/**
+		 * Il faudrait qu'on fasse varier la vitesse
+		 */
+		LCD.drawString("Moteurs demarres", 1, 2);
+
+		while (!ultrason.detectionPalet(.4f, 200))
+			;
 		pliers.open();
-		chassis.forward(700, 10000);
-		if (touch.isPressed())
+		if (touch.isPressed()) {
 			pliers.close();
+		}
 		statut = Statut.GOLLUM;
 	}
-	
-	
 
-	//Aller déposer le palet dans la zone ennemie
+	// Aller déposer le palet dans la zone ennemie
 	public void actionGollum() {
 		pliers.close();
 		chassis.deviation();
@@ -104,7 +111,7 @@ public class ArtificialIntelligence {
 		 */
 	}
 
-	//Après dépôt, rechercher nouveau palet tour 180
+	// Après dépôt, rechercher nouveau palet tour 180
 	public void actionSherlock(int iteration) {
 		boolean test;
 		pliers.open();
@@ -121,7 +128,8 @@ public class ArtificialIntelligence {
 		statut = Statut.EGOCENTRIQUE;
 	}
 
-	//Si on trouve pas de palet à partir de sherlock, alors egocentrique : aller au centre
+	// Si on trouve pas de palet à partir de sherlock, alors egocentrique : aller au
+	// centre
 	public void actionEgocentrique() {
 		/*
 		 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!
@@ -132,7 +140,7 @@ public class ArtificialIntelligence {
 		statut = Statut.SHERLOCK2;
 	}
 
-	//Recherche palet tour complet 360
+	// Recherche palet tour complet 360
 	public void actionSherlock2(int iteration) {
 		boolean test;
 		chassis.completeTurnResearch();
@@ -146,7 +154,7 @@ public class ArtificialIntelligence {
 		statut = Statut.FIN;
 	}
 
-	//Fin de la partie
+	// Fin de la partie
 	public void actionFin() {
 		/*
 		 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!
