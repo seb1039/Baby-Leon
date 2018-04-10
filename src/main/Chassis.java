@@ -31,7 +31,7 @@ public class Chassis {
 		this.chassis.rotate(180);
 		this.chassis.waitComplete();
 	}
-	
+
 	public void uTurnResearch() {
 		this.chassis.setAngularSpeed(150);
 		this.chassis.rotate(180);
@@ -43,7 +43,7 @@ public class Chassis {
 		this.chassis.rotate(360);
 		this.chassis.waitComplete();
 	}
-	
+
 	public void completeTurnResearch() {
 		this.chassis.setAngularSpeed(150);
 		this.chassis.rotate(360);
@@ -53,17 +53,18 @@ public class Chassis {
 	public void stop() {
 		this.chassis.stop();
 	}
-	
+
 	public void halfRotation() {
 		this.chassis.setAngularSpeed(800);
 		this.chassis.rotate(90);
 		this.chassis.waitComplete();
 	}
-	
+
 	public void deviation() {
-		this.chassis.arc(.10, 90);
+		this.chassis.arc(100, 90);
 		this.chassis.waitComplete();
-		forward(800,1000);
+		this.chassis.arc(100, -90);
+		forward(800, 1000);
 	}
 
 }

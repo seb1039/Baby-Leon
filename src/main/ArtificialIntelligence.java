@@ -7,6 +7,7 @@ import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 import lejos.robotics.SampleProvider;
+import lejos.utility.Delay;
 
 public class ArtificialIntelligence {
 
@@ -28,13 +29,15 @@ public class ArtificialIntelligence {
 	private Touch touch;
 	private Colors colors;
 
-	private ArtificialIntelligence() {
+	public ArtificialIntelligence() {
 		this.statut = Statut.STANDBY;
 		this.pliers = new Pliers(Motor.B);
 		this.chassis = new Chassis(Motor.A, Motor.C, 56, 68);
 		this.ultrason = new Ultrason(SensorPort.S3);
 		this.touch = new Touch(SensorPort.S1);
-		this.colors = new Colors((Port) Motor.B);
+	//	this.colors = new Colors(SensorPort.S2);
+		LCD.drawString("Tout est instancié", 1, 1);
+		Delay.msDelay(2000);
 	}
 
 	public Statut getStatut() {
@@ -47,7 +50,6 @@ public class ArtificialIntelligence {
 
 	public void actionToDo() {
 		int iteration = 1000;
-		boolean test;
 		boolean encore = true;
 		while (encore)
 			switch (statut) {
@@ -77,14 +79,20 @@ public class ArtificialIntelligence {
 	}
 
 	// Initialisation de tous les capteurs/moteurs/couleurs
-	public void actionStandby() {
-		LCD.drawString("Appuyez sur ENTER pour commencer", 3, 1);
+	private void actionStandby() {
+		LCD.clear();
+		LCD.drawString("Wait", 1, 1);
+		LCD.drawString("Appuyez sur ENTER",1,2);
+		LCD.drawString("pour commencer", 1,3);
+		LCD.drawString("Statut : STANBY", 1, 7);
 		Button.ENTER.waitForPress();
 		statut = Statut.DEMARRAGE;
 	}
 
 	// Avancer pour chercher palet
-	public void actionDemarrage() {
+	private void actionDemarrage() {
+		LCD.clear();
+		LCD.drawString("Statut : DEM", 1, 7);
 		chassis.forward(150, 100000);
 		/**
 		 * Il faudrait qu'on fasse varier la vitesse
@@ -101,19 +109,25 @@ public class ArtificialIntelligence {
 	}
 
 	// Aller déposer le palet dans la zone ennemie
-	public void actionGollum() {
+	private void actionGollum() {
+		LCD.clear();
+		LCD.drawString("Statut : GOLLUM", 1, 7);
 		pliers.close();
 		chassis.deviation();
+		Delay.msDelay(6000);
+		chassis.forward(800,100);
 		/*
 		 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !! ATTENTION: !! !!
 		 * Il faut rajouter là un test pour la couleur BLANCHE !!
 		 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		 */
+		statut = Statut.SHERLOCK;
 	}
 
 	// Après dépôt, rechercher nouveau palet tour 180
-	public void actionSherlock(int iteration) {
+	private void actionSherlock(int iteration) {
 		boolean test;
+		LCD.drawString("Statut : SHERLOCK", 7, 1);
 		pliers.open();
 		chassis.forward(-800, 10);
 		chassis.halfRotation();
@@ -130,7 +144,7 @@ public class ArtificialIntelligence {
 
 	// Si on trouve pas de palet à partir de sherlock, alors egocentrique : aller au
 	// centre
-	public void actionEgocentrique() {
+	private void actionEgocentrique() {
 		/*
 		 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!
 		 * ATTENTION: !! !! Il faut rajouter là une méthode pour rejoindre le centre!!
@@ -141,7 +155,7 @@ public class ArtificialIntelligence {
 	}
 
 	// Recherche palet tour complet 360
-	public void actionSherlock2(int iteration) {
+	private void actionSherlock2(int iteration) {
 		boolean test;
 		chassis.completeTurnResearch();
 		for (int i = 0; i < iteration; i++) {
@@ -155,7 +169,7 @@ public class ArtificialIntelligence {
 	}
 
 	// Fin de la partie
-	public void actionFin() {
+	private void actionFin() {
 		/*
 		 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!
 		 * ATTENTION: !! !! Il faut rajouter là une méthode pour rejoindre notre camp!!!
