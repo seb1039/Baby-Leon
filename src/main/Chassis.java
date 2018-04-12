@@ -35,7 +35,7 @@ public class Chassis {
 	public void uTurnResearch() {
 		this.chassis.setAngularSpeed(150);
 		this.chassis.rotate(180);
-		this.chassis.waitComplete();
+		//this.chassis.waitComplete();
 	}
 
 	public void completeTurn() {
@@ -47,24 +47,36 @@ public class Chassis {
 	public void completeTurnResearch() {
 		this.chassis.setAngularSpeed(150);
 		this.chassis.rotate(360);
-		this.chassis.waitComplete();
+		//this.chassis.waitComplete();
 	}
 
 	public void stop() {
 		this.chassis.stop();
 	}
 
-	public void halfRotation() {
+	public void halfRotation(boolean bool) {
 		this.chassis.setAngularSpeed(800);
-		this.chassis.rotate(90);
-		this.chassis.waitComplete();
+		if(bool) {
+			this.chassis.rotate(90);
+			this.chassis.waitComplete();
+		}
+		else {
+			this.chassis.rotate(-90);
+			this.chassis.waitComplete();
+		}		
 	}
 
 	public void deviation() {
-		this.chassis.arc(100, 90);
+		this.halfRotation(true);
 		this.chassis.waitComplete();
-		this.chassis.arc(100, -90);
-		forward(800, 1000);
+		this.forward(300,300);
+		this.chassis.waitComplete();
+		this.halfRotation(false);
+		this.chassis.waitComplete();
+	}
+	
+	public boolean isMoving(){
+		return this.chassis.isMoving();
 	}
 
 }

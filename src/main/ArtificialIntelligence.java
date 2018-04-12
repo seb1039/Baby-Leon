@@ -1,6 +1,7 @@
 package main;
 
 import lejos.hardware.Button;
+import lejos.hardware.Sounds;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.Motor;
@@ -9,7 +10,7 @@ import lejos.hardware.port.SensorPort;
 import lejos.robotics.SampleProvider;
 import lejos.utility.Delay;
 
-public class ArtificialIntelligence {
+public class ArtificialIntelligence implements Sounds {
 
 	protected enum Statut {
 		STANDBY, DEMARRAGE, GOLLUM, SHERLOCK, EGOCENTRIQUE, SHERLOCK2, FIN
@@ -29,15 +30,26 @@ public class ArtificialIntelligence {
 	private Touch touch;
 	private Colors colors;
 
+	/**
+	 * Les différents flags
+	 */
+
+	private boolean firstTour;
+	
+	//*Variables globales
+	float distMin;
+
 	public ArtificialIntelligence() {
 		this.statut = Statut.STANDBY;
 		this.pliers = new Pliers(Motor.B);
 		this.chassis = new Chassis(Motor.A, Motor.C, 56, 68);
 		this.ultrason = new Ultrason(SensorPort.S3);
 		this.touch = new Touch(SensorPort.S1);
-	//	this.colors = new Colors(SensorPort.S2);
+		// this.colors = new Colors(SensorPort.S2);
+		this.firstTour = true;
 		LCD.drawString("Tout est instancié", 1, 1);
 		Delay.msDelay(2000);
+		distMin= Float.MAX_VALUE;
 	}
 
 	public Statut getStatut() {
@@ -82,8 +94,8 @@ public class ArtificialIntelligence {
 	private void actionStandby() {
 		LCD.clear();
 		LCD.drawString("Wait", 1, 1);
-		LCD.drawString("Appuyez sur ENTER",1,2);
-		LCD.drawString("pour commencer", 1,3);
+		LCD.drawString("Appuyez sur ENTER", 1, 2);
+		LCD.drawString("pour commencer", 1, 3);
 		LCD.drawString("Statut : STANBY", 1, 7);
 		Button.ENTER.waitForPress();
 		statut = Statut.DEMARRAGE;
@@ -91,6 +103,7 @@ public class ArtificialIntelligence {
 
 	// Avancer pour chercher palet
 	private void actionDemarrage() {
+		distMin=Float.MAX_VALUE;
 		LCD.clear();
 		LCD.drawString("Statut : DEM", 1, 7);
 		chassis.forward(150, 100000);
@@ -113,9 +126,10 @@ public class ArtificialIntelligence {
 		LCD.clear();
 		LCD.drawString("Statut : GOLLUM", 1, 7);
 		pliers.close();
+		LCD.drawString("Palet : recup", 1, 5);
 		chassis.deviation();
-		Delay.msDelay(6000);
-		chassis.forward(800,100);
+		LCD.drawString("Dir : deviation", 1, 6);
+		chassis.forward(800, 1000);
 		/*
 		 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !! ATTENTION: !! !!
 		 * Il faut rajouter là un test pour la couleur BLANCHE !!
@@ -124,23 +138,31 @@ public class ArtificialIntelligence {
 		statut = Statut.SHERLOCK;
 	}
 
-	// Après dépôt, rechercher nouveau palet tour 180
-	private void actionSherlock(int iteration) {
-		boolean test;
-		LCD.drawString("Statut : SHERLOCK", 7, 1);
+    // Après dépôt, rechercher nouveau palet tour 180
+	public void actionSherlock(int iteration) {
+		LCD.clear();
+		LCD.drawString("Statut : GOLLUM", 1, 7);
 		pliers.open();
 		chassis.forward(-800, 10);
-		chassis.halfRotation();
+		chassis.halfRotation(true);
 		chassis.uTurnResearch();
-		for (int i = 0; i < iteration; i++) {
-			test = ultrason.detectionPalet(20);
-			if (test) {
-				statut = Statut.DEMARRAGE;
-				continue;
+		while(chassis.isMoving()){
+			if(ultrason.giveDistance()<distMin){
+			distMin=ultrason.giveDistance();
 			}
+		};
+		chassis.uTurnResearch();
+		if(ultrason.giveDistance()==distMin){
+			chassis.stop();
 		}
-		statut = Statut.EGOCENTRIQUE;
+		statut = Statut.DEMARRAGE;
 	}
+
+public boolean isMoving(){
+		return this.chassis.isMoving();
+	}
+
+
 
 	// Si on trouve pas de palet à partir de sherlock, alors egocentrique : aller au
 	// centre
@@ -177,5 +199,9 @@ public class ArtificialIntelligence {
 		 */
 		chassis.uTurn();
 		chassis.forward(-800, 100);
+		ultrason.close();
+		touch.close();
+		colors.close();
+
 	}
 }

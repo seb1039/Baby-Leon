@@ -98,6 +98,42 @@ public class Ultrason extends EV3UltrasonicSensor {
 		}
 		return false;
 	}
+	
+	public boolean researchPalet(int delay) {
+		/**
+		 * 1. On fait un tour d'horizon on garde le plus proche 2. On refait un tour d'horizon jusqu'à retrouver la distance minimum détectée avant 
+		 */
+
+		LCD.clear();
+		LCD.drawString("distance:", 1, 2);
+		LCD.drawString("" + range, 1, 3);
+
+		/**
+		 * Etape 1
+		 */
+		double distance = Double.MAX_VALUE;  
+		view.fetchSample(sample, 0);
+		range = sample[0];
+		if (range > distance || range < 0.0f)
+			return false;
+		Delay.msDelay(delay);
+		/**
+		 * Etape 2
+		 */
+		view.fetchSample(sample, 0);
+		range = sample[0];
+		if (range < distance && range > 0.0f) {
+			LCD.drawString("Detecte" + (double) range, 1, 4);
+			return true;
+		}
+		return false;
+	}
+	
+	public float giveDistance(){
+		view.fetchSample(sample, 0);
+		range = sample[0];
+		return range;
+	}
 
 	public static void ultrasonTest() {
 		EV3UltrasonicSensor ultrason = new EV3UltrasonicSensor(SensorPort.S3);
