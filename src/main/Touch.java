@@ -23,17 +23,8 @@ public class Touch extends EV3TouchSensor {
 	}
 
 	private boolean majPressed() {
-		
-		//toucher.fetchSample(sample, 0);
-		//range = sample[0];
-		/***
-		LCD.clear();
-		LCD.drawString("" +range , 4, 3);
-		pressed = (range >0);
-		***/
 		while (range != 1) {
 			toucher.fetchSample(sample, 0);
-			// System.out.printf("%.5f m\n", sample[0]);
 			range = sample[0];
 		}
 		pressed= (range==1);
@@ -41,6 +32,8 @@ public class Touch extends EV3TouchSensor {
 	}
 
 	public boolean isPressed() {
+		pressed = false;
+		range = 0;
 		majPressed();
 		return pressed;
 	}
